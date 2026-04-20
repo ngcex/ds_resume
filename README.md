@@ -38,3 +38,12 @@ public/         # Static assets served as-is
 ## Environment variables
 
 - `PUBLIC_FORMSPREE_ID` — Formspree form id used by `/contact`. If unset, the form falls back to a `mailto:` action.
+
+## Deployment
+
+The site auto-deploys to GitHub Pages via `.github/workflows/deploy.yml` on every push to `main`.
+
+**One-time setup after the workflow first lands on `main`:**
+GitHub → **Settings** → **Pages** → **Build and deployment** → **Source**: select `GitHub Actions`.
+
+Subsequent pushes will build and publish automatically; no `gh-pages` branch is used.

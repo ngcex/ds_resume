@@ -73,8 +73,16 @@ const site = defineCollection({
       linkedin: z.string().optional(),
       orcid: z.string().optional(),
       email: z.string().optional(),
+      scholar: z.string().nullable().optional(),
     }),
     formspreeId: z.string().nullable().optional(),
+  }),
+});
+
+const pages = defineCollection({
+  loader: glob({ pattern: "**/*.mdx", base: "./src/content/pages" }),
+  schema: z.object({
+    title: z.string(),
   }),
 });
 
@@ -84,4 +92,5 @@ export const collections = {
   publications,
   projects,
   site,
+  pages,
 };

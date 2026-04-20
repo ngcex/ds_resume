@@ -8,6 +8,12 @@ export default defineConfig({
   site: 'https://ngcex.github.io',
   base: '/ds_resume',
   trailingSlash: 'ignore',
-  integrations: [mdx(), sitemap(), icon()],
+  integrations: [
+    mdx(),
+    sitemap({
+      filter: (page) => !page.includes('/portfolio.html'),
+    }),
+    icon(),
+  ],
   vite: { plugins: [tailwindcss()] },
 });

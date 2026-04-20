@@ -1,13 +1,18 @@
-# Placeholder site config — Agent A will overwrite with real values.
-# The `file()` loader treats each top-level key as an entry id.
 main:
-  name: "Cesare Scalia"
+  name: "Cesare Scalia, PhD"
   jobTitle: "Lead Data Scientist — Causal ML & AI Systems"
-  tagline: "Scientist-turned-engineer building causal ML systems."
-  bio: "Astrophysicist turned data scientist. I build causal ML systems and AI tooling that move metrics teams actually report on."
+  tagline: "Lead Data Scientist at Life360. PhD Physics. Causal ML, NLP, agentic AI."
+  bio: >-
+    Lead Data Scientist at Life360, responsible for causal measurement across
+    advertising campaigns reaching millions of geolocated users. A decade
+    applying machine learning, causal inference, NLP and graph analytics across
+    energy, defence, semiconductors and astrophysics research. PhD in Physics
+    (Catania; visiting Armagh Observatory), postgraduate master in Economic
+    Intelligence (IASSP).
   socials:
     github: "https://github.com/ngcex"
-    linkedin: "https://www.linkedin.com/in/cesarescalia"
-    orcid: "https://orcid.org/0000-0000-0000-0000"
+    linkedin: "https://www.linkedin.com/in/cesare-scalia-phd/"
+    orcid: "https://orcid.org/0000-0002-8399-6549"
     email: "ngcesare@gmail.com"
+    scholar: null
   formspreeId: null

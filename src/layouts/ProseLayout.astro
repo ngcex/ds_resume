@@ -6,11 +6,26 @@ interface Props {
   description: string;
   image?: string;
   canonical?: string;
+  type?: 'website' | 'article' | 'profile';
+  article?: {
+    publishDate?: string | Date;
+    modifiedDate?: string | Date;
+    author?: string;
+  };
+  schema?: 'Person' | 'WebSite' | 'CollectionPage' | null;
 }
 
-const { title, description, image, canonical } = Astro.props;
+const { title, description, image, canonical, type, article, schema } = Astro.props;
 ---
-<BaseLayout title={title} description={description} image={image} canonical={canonical}>
+<BaseLayout
+  title={title}
+  description={description}
+  image={image}
+  canonical={canonical}
+  type={type}
+  article={article}
+  schema={schema}
+>
   <article class="prose-scientific">
     <slot />
   </article>

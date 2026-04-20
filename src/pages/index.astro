@@ -25,9 +25,15 @@ try {
   /* collection not available yet */
 }
 
-const description = `${name} — ${jobTitle}. ${bio}`;
+const description =
+  'Cesare Scalia, PhD — Lead Data Scientist at Life360. Causal ML, NLP, agentic AI. 13 peer-reviewed publications in A&A, MNRAS, Astronomical Journal.';
 ---
-<BaseLayout title={`${name} — ${jobTitle}`} description={description}>
+<BaseLayout
+  title={`${name} — ${jobTitle}`}
+  description={description}
+  type="profile"
+  schema="Person"
+>
   <Hero name={name} title={jobTitle} bio={bio} />
 
   <CurrentRole

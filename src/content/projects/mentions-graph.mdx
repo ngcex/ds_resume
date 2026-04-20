@@ -1,0 +1,16 @@
+---
+title: "Mentions graph — a trusted network of energy experts on Twitter"
+summary: "Graph traversal and active-node classification to surface a trusted community of energy experts from the open Twitter mentions/retweet network."
+year: 2024
+tags:
+  - graph-ml
+  - nlp
+  - twitter
+featured: true
+---
+
+Built with NetworkX and the Louvain community-detection algorithm, the project treats a mentions-and-retweets graph as a noisy social substrate and uses active node classification to isolate a trusted community of domain experts in the energy sector. The pipeline combines graph traversal with transformer-based textual features to propagate labels to unseen nodes while keeping a human-in-the-loop for uncertain cases.
+
+The work was published in the *International Journal of Computer Science and Mobile Applications* (2024) as *Building a Trusted Network of Energy Experts on Twitter through Graph Traversal and Active Node Classification*, with Eni's Advanced Analytics team.
+
+Under the hood the system relies on a hybrid of structural centrality, semantic similarity from fine-tuned transformers and iterative relabelling under weak supervision, yielding a directed subgraph that materially outperforms keyword-only baselines on expert recall.
