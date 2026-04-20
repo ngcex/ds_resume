@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#1e1b4b"/>
+    </linearGradient>
+    <pattern id="grid" x="0" y="0" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M 48 0 L 0 0 0 48" fill="none" stroke="#312e81" stroke-width="1" opacity="0.35"/>
+    </pattern>
+    <radialGradient id="dot" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#6366f1" stop-opacity="0.9"/>
+      <stop offset="60%" stop-color="#3730a3" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="#3730a3" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect x="540" y="0" width="660" height="630" fill="url(#grid)"/>
+  <circle cx="920" cy="315" r="260" fill="url(#dot)"/>
+  <circle cx="920" cy="315" r="18" fill="#818cf8"/>
+
+  <!-- Left column: text -->
+  <g font-family="Georgia, 'IBM Plex Serif', 'Times New Roman', serif">
+    <text x="72" y="230" font-size="72" font-weight="700" fill="#f8fafc">Cesare Scalia, PhD</text>
+  </g>
+  <g font-family="'Helvetica Neue', Inter, system-ui, sans-serif">
+    <text x="72" y="290" font-size="30" font-weight="500" fill="#cbd5e1">Lead Data Scientist</text>
+    <text x="72" y="330" font-size="26" font-weight="400" fill="#94a3b8">Causal ML &#8226; NLP &#8226; Agentic AI</text>
+
+    <!-- Divider -->
+    <line x1="72" y1="400" x2="240" y2="400" stroke="#6366f1" stroke-width="3"/>
+
+    <text x="72" y="450" font-size="20" font-weight="400" fill="#94a3b8">Life360 &#8226; PhD Physics (Catania)</text>
+    <text x="72" y="480" font-size="20" font-weight="400" fill="#94a3b8">ORCID 0000-0002-8399-6549</text>
+
+    <text x="72" y="560" font-size="22" font-weight="500" fill="#e2e8f0">ngcex.github.io/ds_resume</text>
+  </g>
+</svg>

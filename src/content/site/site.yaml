@@ -1,0 +1,18 @@
+main:
+  name: "Cesare Scalia, PhD"
+  jobTitle: "Lead Data Scientist — Causal ML & AI Systems"
+  tagline: "Lead Data Scientist at Life360. PhD Physics. Causal ML, NLP, agentic AI."
+  bio: >-
+    Lead Data Scientist at Life360, responsible for causal measurement across
+    advertising campaigns reaching millions of geolocated users. A decade
+    applying machine learning, causal inference, NLP and graph analytics across
+    energy, defence, semiconductors and astrophysics research. PhD in Physics
+    (Catania; visiting Armagh Observatory), postgraduate master in Economic
+    Intelligence (IASSP).
+  socials:
+    github: "https://github.com/ngcex"
+    linkedin: "https://www.linkedin.com/in/cesare-scalia-phd/"
+    orcid: "https://orcid.org/0000-0002-8399-6549"
+    email: "ngcesare@gmail.com"
+    scholar: null
+  formspreeId: null

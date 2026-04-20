@@ -1,0 +1,36 @@
+---
+import TimelineItem from './TimelineItem.astro';
+
+interface Item {
+  title: string;
+  company: string;
+  startDate: Date | string;
+  endDate?: Date | string | null;
+  summary?: string;
+  bullets?: string[];
+  location?: string;
+}
+
+interface Props {
+  items: Item[];
+}
+
+const { items } = Astro.props;
+---
+{items.length === 0 ? (
+  <p class="text-slate-500 dark:text-slate-400">Coming soon.</p>
+) : (
+  <ol class="relative space-y-8 border-l border-slate-200 dark:border-slate-800 pl-4">
+    {items.map((item) => (
+      <TimelineItem
+        title={item.title}
+        company={item.company}
+        startDate={item.startDate}
+        endDate={item.endDate}
+        summary={item.summary}
+        bullets={item.bullets}
+        location={item.location}
+      />
+    ))}
+  </ol>
+)}

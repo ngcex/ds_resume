@@ -1,0 +1,33 @@
+{
+  "name": "ds_resume",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Cesare Scalia — personal portfolio and publications site (Astro 6, static, GitHub Pages).",
+  "homepage": "https://ngcex.github.io/ds_resume",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ngcex/ds_resume.git"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/mdx": "^5.0.3",
+    "@astrojs/rss": "^4.0.18",
+    "@astrojs/sitemap": "^3.7.2",
+    "@fontsource-variable/inter": "^5.2.8",
+    "@fontsource/ibm-plex-serif": "^5.2.7",
+    "@iconify-json/lucide": "^1.2.102",
+    "@tailwindcss/vite": "^4.2.2",
+    "astro": "^6.1.8",
+    "astro-icon": "^1.1.5",
+    "tailwindcss": "^4.2.2"
+  }
+}

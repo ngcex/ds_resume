@@ -1,0 +1,115 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PublicationRow from "../components/PublicationRow.astro";
+import PublicationFilter from "../components/PublicationFilter.astro";
+import { getCollection } from "astro:content";
+
+const orcid = "0000-0002-8399-6549";
+
+type Pub = {
+  title: string;
+  year: number;
+  venue: string;
+  venueShort?: string;
+  type: "peer-reviewed" | "conference" | "internal-talk" | "poster";
+  authors: string[];
+  authorPosition: "first" | "middle" | "last" | "solo";
+  doi?: string | null;
+  adsLink?: string | null;
+  url?: string | null;
+};
+
+let pubs: Pub[] = [];
+try {
+  const entries = await getCollection("publications");
+  pubs = entries.map((e) => e.data as Pub);
+} catch {
+  /* collection empty or not ready */
+}
+
+const positionRank: Record<Pub["authorPosition"], number> = {
+  first: 0,
+  solo: 1,
+  middle: 2,
+  last: 3,
+};
+
+pubs.sort((a, b) => {
+  if (b.year !== a.year) return b.year - a.year;
+  if (positionRank[a.authorPosition] !== positionRank[b.authorPosition]) {
+    return positionRank[a.authorPosition] - positionRank[b.authorPosition];
+  }
+  return a.title.localeCompare(b.title);
+});
+
+// Group by year (preserving sorted order)
+const years: number[] = [];
+const grouped: Record<number, Pub[]> = {};
+for (const p of pubs) {
+  if (!(p.year in grouped)) {
+    years.push(p.year);
+    grouped[p.year] = [];
+  }
+  grouped[p.year].push(p);
+}
+
+// Counts for filter chips
+const counts: Record<string, number> = { all: pubs.length };
+for (const p of pubs) {
+  counts[p.type] = (counts[p.type] ?? 0) + 1;
+}
+---
+<BaseLayout
+  title="Publications — Cesare Scalia"
+  description="Peer-reviewed publications, conference talks, and posters by Cesare Scalia."
+>
+  <h1 class="text-3xl font-serif font-semibold tracking-tight">Publications</h1>
+
+  <p class="mt-2 text-sm text-slate-600 dark:text-slate-400">
+    ORCID:&nbsp;
+    <a
+      href={`https://orcid.org/${orcid}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="font-mono text-accent-700 dark:text-accent-400 no-underline hover:underline"
+    >
+      {orcid}
+    </a>
+  </p>
+
+  <div class="mt-6">
+    <PublicationFilter targetId="pub-list" counts={counts} />
+  </div>
+
+  {pubs.length === 0 ? (
+    <p class="mt-8 text-sm text-slate-500 dark:text-slate-400">No publications yet.</p>
+  ) : (
+    <ul id="pub-list" class="mt-8 space-y-0" aria-label="Publications list">
+      {years.map((y) => (
+        <li data-year-group={y} class="mb-6 last:mb-0 list-none">
+          <h2
+            class="text-xs font-mono uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1"
+          >
+            {y}
+          </h2>
+          <ul class="list-none">
+            {grouped[y].map((p) => (
+              <PublicationRow
+                title={p.title}
+                year={p.year}
+                venue={p.venue}
+                venueShort={p.venueShort}
+                type={p.type}
+                authors={p.authors}
+                authorPosition={p.authorPosition}
+                doi={p.doi}
+                adsLink={p.adsLink}
+                url={p.url}
+              />
+            ))}
+          </ul>
+        </li>
+      ))}
+    </ul>
+  )}
+</BaseLayout>

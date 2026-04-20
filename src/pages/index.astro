@@ -1,0 +1,184 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import CurrentRole from '../components/CurrentRole.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { getCollection } from 'astro:content';
+
+const bp = import.meta.env.BASE_URL;
+const base = bp.endsWith('/') ? bp.slice(0, -1) : bp;
+
+// Fallback defaults in case the site collection has not yet been populated.
+let name = 'Cesare Scalia';
+let jobTitle = 'Lead Data Scientist — Causal ML & AI Systems';
+let bio =
+  'Astrophysicist turned data scientist. I build causal ML systems and AI tooling that move metrics teams actually report on.';
+
+try {
+  const entries = await getCollection('site');
+  if (entries.length > 0) {
+    const d = entries[0].data;
+    name = d.name ?? name;
+    jobTitle = d.jobTitle ?? jobTitle;
+    bio = d.bio ?? bio;
+  }
+} catch {
+  /* collection not available yet */
+}
+
+// Top 3 most-recent peer-reviewed publications
+type PubLite = {
+  title: string;
+  year: number;
+  venueShort?: string;
+  venue: string;
+  doi?: string | null;
+  adsLink?: string | null;
+  url?: string | null;
+};
+let selectedPubs: PubLite[] = [];
+try {
+  const pubs = await getCollection('publications');
+  selectedPubs = pubs
+    .filter((p) => p.data.type === 'peer-reviewed')
+    .map((p) => ({
+      title: p.data.title,
+      year: p.data.year,
+      venueShort: p.data.venueShort,
+      venue: p.data.venue,
+      doi: p.data.doi ?? null,
+      adsLink: p.data.adsLink ?? null,
+      url: p.data.url ?? null,
+    }))
+    .sort((a, b) => b.year - a.year)
+    .slice(0, 3);
+} catch {
+  /* collection not available yet */
+}
+
+// Featured projects (up to 3)
+type ProjLite = {
+  id: string;
+  title: string;
+  summary: string;
+  year: number;
+  tags: string[];
+};
+let featuredProjects: ProjLite[] = [];
+try {
+  const projects = await getCollection('projects');
+  featuredProjects = projects
+    .filter((p) => p.data.featured)
+    .map((p) => ({
+      id: p.id,
+      title: p.data.title,
+      summary: p.data.summary,
+      year: p.data.year,
+      tags: p.data.tags ?? [],
+    }))
+    .sort((a, b) => b.year - a.year)
+    .slice(0, 3);
+} catch {
+  /* collection not available yet */
+}
+
+const description =
+  'Cesare Scalia, PhD — Lead Data Scientist at Life360. Causal ML, NLP, agentic AI. 13 peer-reviewed publications in A&A, MNRAS, Astronomical Journal.';
+---
+<BaseLayout
+  title={`${name} — ${jobTitle}`}
+  description={description}
+  type="profile"
+  schema="Person"
+>
+  <Hero name={name} title={jobTitle} bio={bio} />
+
+  <CurrentRole
+    role="Lead Data Scientist"
+    company="Life360"
+    startDate="2025-01-01"
+    summary="Leading causal ML and experimentation work across a large consumer product."
+  />
+
+  <section class="mt-12">
+    <div class="flex items-baseline justify-between gap-4">
+      <h2 class="text-2xl font-serif font-semibold tracking-tight">Selected publications</h2>
+      <a
+        href={`${base}/publications`}
+        class="text-sm text-accent-700 dark:text-accent-400 no-underline hover:underline"
+      >
+        All publications &rarr;
+      </a>
+    </div>
+    {selectedPubs.length === 0 ? (
+      <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">Coming soon.</p>
+    ) : (
+      <ul class="mt-4 divide-y divide-slate-100 dark:divide-slate-800 list-none">
+        {selectedPubs.map((p) => {
+          const doiHref = p.doi ? (p.doi.startsWith('http') ? p.doi : `https://doi.org/${p.doi}`) : null;
+          return (
+            <li class="grid grid-cols-[3rem_1fr_auto] items-baseline gap-x-4 py-3">
+              <span class="font-mono text-xs tabular-nums text-slate-500 dark:text-slate-400">{p.year}</span>
+              <div class="min-w-0">
+                <p class="text-sm font-serif italic text-slate-900 dark:text-slate-100 leading-snug">{p.title}</p>
+                {doiHref && (
+                  <a
+                    href={doiHref}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="mt-1 inline-block text-xs text-accent-700 dark:text-accent-400 no-underline hover:underline"
+                  >
+                    DOI &#8599;
+                  </a>
+                )}
+              </div>
+              <span class="justify-self-end text-xs font-medium text-slate-600 dark:text-slate-400 whitespace-nowrap" title={p.venue}>
+                {p.venueShort ?? p.venue}
+              </span>
+            </li>
+          );
+        })}
+      </ul>
+    )}
+  </section>
+
+  <section class="mt-12">
+    <div class="flex items-baseline justify-between gap-4">
+      <h2 class="text-2xl font-serif font-semibold tracking-tight">Selected projects</h2>
+      <a
+        href={`${base}/projects`}
+        class="text-sm text-accent-700 dark:text-accent-400 no-underline hover:underline"
+      >
+        All projects &rarr;
+      </a>
+    </div>
+    {featuredProjects.length === 0 ? (
+      <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">Coming soon.</p>
+    ) : (
+      <div class="mt-4 grid gap-6 sm:grid-cols-2">
+        {featuredProjects.map((p) => (
+          <ProjectCard
+            title={p.title}
+            summary={p.summary}
+            year={p.year}
+            tags={p.tags}
+            href={`${base}/projects/${p.id}`}
+          />
+        ))}
+      </div>
+    )}
+  </section>
+
+  <section class="mt-12 rounded-lg border border-slate-200 dark:border-slate-800 p-6">
+    <h2 class="text-xl font-serif font-semibold tracking-tight">Get in touch</h2>
+    <p class="mt-2 text-sm text-slate-700 dark:text-slate-300">
+      Want to chat about causal ML, experimentation, or a collaboration?
+    </p>
+    <a
+      href={`${base}/contact`}
+      class="mt-4 inline-flex items-center rounded-md bg-accent-700 px-4 py-2 text-sm font-medium text-white no-underline hover:bg-accent-600"
+    >
+      Contact
+    </a>
+  </section>
+</BaseLayout>

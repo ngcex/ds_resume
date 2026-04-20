@@ -1,0 +1,29 @@
+---
+import ProseLayout from '../layouts/ProseLayout.astro';
+import { getCollection, render } from 'astro:content';
+
+let Content: Awaited<ReturnType<typeof render>>['Content'] | null = null;
+let title = 'About';
+const description =
+  'About Cesare Scalia — PhD Physics, Lead Data Scientist bridging scientific research and applied AI.';
+
+try {
+  const pages = await getCollection('pages');
+  const about = pages.find((p) => p.id === 'about');
+  if (about) {
+    const rendered = await render(about);
+    Content = rendered.Content;
+    title = about.data.title ?? title;
+  }
+} catch {
+  /* ignore */
+}
+---
+<ProseLayout title={title} description={description}>
+  <h1>About</h1>
+  {Content ? (
+    <Content />
+  ) : (
+    <p>Coming soon.</p>
+  )}
+</ProseLayout>

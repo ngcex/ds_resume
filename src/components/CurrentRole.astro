@@ -1,0 +1,26 @@
+---
+interface Props {
+  role: string;
+  company: string;
+  startDate: string | Date;
+  summary?: string;
+}
+
+const { role, company, startDate, summary } = Astro.props;
+const year =
+  typeof startDate === 'string'
+    ? new Date(startDate).getFullYear()
+    : startDate.getFullYear();
+---
+<aside
+  class="my-6 rounded-lg border border-accent-100 dark:border-accent-900/40 bg-accent-50/60 dark:bg-accent-900/10 p-5"
+>
+  <p class="text-xs uppercase tracking-wider text-accent-700 dark:text-accent-400 font-medium">
+    Currently
+  </p>
+  <p class="mt-1 text-base font-medium text-slate-900 dark:text-slate-100">
+    {role} at {company}
+    <span class="text-slate-500 dark:text-slate-400 font-normal"> &middot; since {year}</span>
+  </p>
+  {summary && <p class="mt-2 text-sm text-slate-700 dark:text-slate-300">{summary}</p>}
+</aside>

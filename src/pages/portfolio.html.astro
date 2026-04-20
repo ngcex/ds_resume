@@ -1,0 +1,20 @@
+---
+const bp = import.meta.env.BASE_URL;
+const base = bp.endsWith('/') ? bp.slice(0, -1) : bp;
+const target = `${base}/projects`;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="refresh" content={`0; url=${target}`} />
+    <link rel="canonical" href={target} />
+    <title>Redirecting…</title>
+  </head>
+  <body>
+    <p>
+      This page has moved. If you are not redirected automatically,
+      <a href={target}>go to Projects</a>.
+    </p>
+  </body>
+</html>

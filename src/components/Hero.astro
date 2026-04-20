@@ -1,0 +1,35 @@
+---
+interface Props {
+  name: string;
+  title: string;
+  bio: string;
+}
+
+const { name, title, bio } = Astro.props;
+const bp = import.meta.env.BASE_URL;
+const base = bp.endsWith('/') ? bp.slice(0, -1) : bp;
+const cvHref = `${base}/Cesare_Scalia_CV_2026.pdf`;
+const contactHref = `${base}/contact`;
+---
+<section class="py-8">
+  <h1 class="font-serif text-4xl sm:text-5xl font-semibold tracking-tight">
+    {name}
+  </h1>
+  <p class="mt-3 text-lg text-accent-700 dark:text-accent-400 font-medium">{title}</p>
+  <p class="mt-4 text-slate-700 dark:text-slate-300 leading-relaxed max-w-prose">{bio}</p>
+
+  <div class="mt-6 flex flex-wrap gap-3">
+    <a
+      href={cvHref}
+      class="inline-flex items-center rounded-md bg-accent-700 px-4 py-2 text-sm font-medium text-white no-underline hover:bg-accent-600"
+    >
+      View CV
+    </a>
+    <a
+      href={contactHref}
+      class="inline-flex items-center rounded-md border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 no-underline hover:bg-slate-100 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800"
+    >
+      Contact
+    </a>
+  </div>
+</section>

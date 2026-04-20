@@ -1,0 +1,47 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Timeline from '../components/Timeline.astro';
+import { getCollection } from 'astro:content';
+
+type Item = {
+  title: string;
+  company: string;
+  startDate: Date | string;
+  endDate?: Date | string | null;
+  summary?: string;
+  bullets?: string[];
+  location?: string;
+};
+
+let items: Item[] = [];
+try {
+  const entries = await getCollection('experience');
+  items = entries
+    .map((e) => ({
+      title: e.data.title,
+      company: e.data.company,
+      startDate: e.data.startDate,
+      endDate: e.data.endDate ?? null,
+      summary: e.data.summary,
+      bullets: e.data.bullets,
+      location: e.data.location,
+    }))
+    .sort((a, b) => {
+      const ad = a.startDate instanceof Date ? a.startDate.getTime() : new Date(a.startDate).getTime();
+      const bd = b.startDate instanceof Date ? b.startDate.getTime() : new Date(b.startDate).getTime();
+      return bd - ad;
+    });
+} catch {
+  /* ignore — collection empty or not ready */
+}
+---
+<BaseLayout
+  title="Experience — Cesare Scalia"
+  description="Professional experience and roles."
+>
+  <h1 class="text-3xl font-serif font-semibold tracking-tight mb-8">Experience</h1>
+  <section aria-labelledby="roles-heading">
+    <h2 id="roles-heading" class="sr-only">Roles</h2>
+    <Timeline items={items} />
+  </section>
+</BaseLayout>

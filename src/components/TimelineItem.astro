@@ -1,0 +1,43 @@
+---
+interface Props {
+  title: string;
+  company: string;
+  startDate: Date | string;
+  endDate?: Date | string | null;
+  summary?: string;
+  bullets?: string[];
+  location?: string;
+}
+
+const { title, company, startDate, endDate, summary, bullets, location } =
+  Astro.props;
+
+const fmt = (d: Date | string | null | undefined) => {
+  if (!d) return 'Present';
+  const dt = typeof d === 'string' ? new Date(d) : d;
+  return dt.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+};
+---
+<li class="relative pl-6">
+  <span
+    class="absolute left-0 top-2 h-2 w-2 rounded-full bg-accent-700 dark:bg-accent-500"
+    aria-hidden="true"
+  ></span>
+  <div class="flex flex-wrap items-baseline gap-x-2">
+    <h3 class="text-base font-semibold text-slate-900 dark:text-slate-100">{title}</h3>
+    <span class="text-slate-500 dark:text-slate-400">&middot;</span>
+    <span class="text-slate-700 dark:text-slate-300">{company}</span>
+  </div>
+  <p class="mt-0.5 text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">
+    {fmt(startDate)} &ndash; {fmt(endDate)}
+    {location && <span> &middot; {location}</span>}
+  </p>
+  {summary && (
+    <p class="mt-2 text-sm text-slate-700 dark:text-slate-300 leading-relaxed">{summary}</p>
+  )}
+  {bullets && bullets.length > 0 && (
+    <ul class="mt-2 list-disc space-y-1 pl-5 text-sm text-slate-700 dark:text-slate-300">
+      {bullets.map((b) => <li>{b}</li>)}
+    </ul>
+  )}
+</li>

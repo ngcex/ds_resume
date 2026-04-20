@@ -1,0 +1,138 @@
+@import "tailwindcss";
+@import "@fontsource-variable/inter";
+@import "@fontsource/ibm-plex-serif/400.css";
+@import "@fontsource/ibm-plex-serif/600.css";
+
+/* Fallback font-face definitions matched to web-font metrics to minimise
+   layout shift when the real font swaps in. Numbers approximate system
+   default metrics for the Inter/IBM Plex Serif weights we ship. */
+@font-face {
+  font-family: "Inter-fallback";
+  src: local("Arial");
+  ascent-override: 90%;
+  descent-override: 22%;
+  line-gap-override: 0%;
+  size-adjust: 107%;
+}
+@font-face {
+  font-family: "IBMPlexSerif-fallback";
+  src: local("Georgia");
+  ascent-override: 95%;
+  descent-override: 25%;
+  line-gap-override: 0%;
+  size-adjust: 104%;
+}
+
+@theme {
+  --color-accent-50: oklch(0.96 0.02 272);
+  --color-accent-100: oklch(0.91 0.05 272);
+  --color-accent-300: oklch(0.78 0.12 272);
+  --color-accent-400: oklch(
+    0.72 0.15 272
+  ); /* dark-mode text: ~4.8:1 on slate-950 */
+  --color-accent-500: oklch(0.51 0.18 272);
+  --color-accent-600: oklch(0.45 0.2 272);
+  --color-accent-700: oklch(0.36 0.2 272); /* #3730a3 approx */
+  --color-accent-900: oklch(0.25 0.16 272);
+  --font-sans:
+    "Inter Variable", "Inter-fallback", ui-sans-serif, system-ui, -apple-system,
+    sans-serif;
+  --font-serif:
+    "IBM Plex Serif", "IBMPlexSerif-fallback", ui-serif, Georgia, serif;
+}
+
+@variant dark (&:where(.dark, .dark *));
+
+:root {
+  color-scheme: light dark;
+}
+html {
+  font-family: var(--font-sans);
+}
+body {
+  @apply bg-white text-slate-900 dark:bg-slate-950 dark:text-slate-100 antialiased;
+}
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-serif);
+  @apply font-semibold tracking-tight;
+}
+a {
+  @apply underline-offset-4 decoration-accent-500/40 hover:decoration-accent-500;
+}
+
+/* Visible focus states for keyboard users, across buttons, links, inputs. */
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--color-accent-500);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Skip link — visible on focus only */
+.skip-link {
+  position: absolute;
+  left: 0.5rem;
+  top: 0.5rem;
+  z-index: 50;
+  padding: 0.5rem 0.75rem;
+  background: var(--color-accent-700);
+  color: #fff;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  text-decoration: none;
+  transform: translateY(-150%);
+  transition: transform 120ms ease;
+}
+.skip-link:focus,
+.skip-link:focus-visible {
+  transform: translateY(0);
+}
+
+/* Prose tweaks */
+.prose-scientific {
+  @apply max-w-prose leading-relaxed;
+}
+.prose-scientific h1 {
+  @apply text-3xl mt-2 mb-6;
+}
+.prose-scientific h2 {
+  @apply mt-12 mb-4 text-2xl;
+}
+.prose-scientific h3 {
+  @apply mt-8 mb-3 text-xl;
+}
+.prose-scientific p {
+  @apply my-4;
+}
+.prose-scientific ul {
+  @apply my-4 list-disc pl-6;
+}
+.prose-scientific ol {
+  @apply my-4 list-decimal pl-6;
+}
+.prose-scientific li {
+  @apply my-1;
+}
+.prose-scientific a {
+  @apply text-accent-700 dark:text-accent-400;
+}
+.prose-scientific strong {
+  @apply font-semibold text-slate-900 dark:text-slate-100;
+}
+.prose-scientific em {
+  @apply italic;
+}
+
+/* Respect reduced motion preferences. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
