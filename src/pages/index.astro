@@ -56,26 +56,40 @@ try {
   /* collection not available yet */
 }
 
-// Featured projects (up to 3)
+// Featured projects (up to 3) with resolved cover images
+const coverAssets = import.meta.glob<{ default: ImageMetadata }>(
+  '../assets/projects/*.{gif,jpg,jpeg,png,webp}',
+  { eager: true },
+);
+const coverByName = new Map<string, ImageMetadata>(
+  Object.entries(coverAssets).map(([path, mod]) => [path.split('/').pop()!, mod.default]),
+);
+
 type ProjLite = {
   id: string;
   title: string;
   summary: string;
   year: number;
   tags: string[];
+  cover?: ImageMetadata | string;
 };
 let featuredProjects: ProjLite[] = [];
 try {
   const projects = await getCollection('projects');
   featuredProjects = projects
     .filter((p) => p.data.featured)
-    .map((p) => ({
-      id: p.id,
-      title: p.data.title,
-      summary: p.data.summary,
-      year: p.data.year,
-      tags: p.data.tags ?? [],
-    }))
+    .map((p) => {
+      const coverName = p.data.coverImage;
+      const cover = coverName ? coverByName.get(coverName) ?? coverName : undefined;
+      return {
+        id: p.id,
+        title: p.data.title,
+        summary: p.data.summary,
+        year: p.data.year,
+        tags: p.data.tags ?? [],
+        cover,
+      };
+    })
     .sort((a, b) => b.year - a.year)
     .slice(0, 3);
 } catch {
@@ -162,6 +176,7 @@ const description =
             summary={p.summary}
             year={p.year}
             tags={p.tags}
+            coverImage={p.cover}
             href={`${base}/projects/${p.id}`}
           />
         ))}

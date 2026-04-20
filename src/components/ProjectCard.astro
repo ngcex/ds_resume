@@ -11,22 +11,56 @@ interface Props {
 }
 
 const { title, summary, year, tags = [], coverImage, href } = Astro.props;
+
+// Detect animated formats (Astro's Image component cannot process them).
+const isAnimated =
+  typeof coverImage === 'string'
+    ? /\.(gif|webp)$/i.test(coverImage)
+    : coverImage && 'src' in coverImage && typeof coverImage.src === 'string'
+      ? /\.gif/i.test(coverImage.src)
+      : false;
+
+const rawSrc =
+  coverImage && typeof coverImage !== 'string' && 'src' in coverImage
+    ? coverImage.src
+    : typeof coverImage === 'string'
+      ? coverImage
+      : null;
 ---
 <a
   href={href}
   class="group block rounded-lg border border-slate-200 dark:border-slate-800 overflow-hidden no-underline hover:border-accent-500 transition-colors"
 >
-  {coverImage && typeof coverImage !== 'string' && (
-    <Image
-      src={coverImage}
-      alt=""
-      class="aspect-[16/9] w-full object-cover"
-      widths={[400, 800]}
-      sizes="(max-width: 640px) 100vw, 400px"
-    />
-  )}
-  {coverImage && typeof coverImage === 'string' && (
-    <img src={coverImage} alt="" class="aspect-[16/9] w-full object-cover" />
+  {coverImage && (
+    <div class="relative aspect-[16/9] w-full overflow-hidden bg-slate-100 dark:bg-slate-900">
+      {isAnimated && rawSrc ? (
+        <img
+          src={rawSrc}
+          alt=""
+          loading="lazy"
+          class="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+        />
+      ) : typeof coverImage !== 'string' ? (
+        <Image
+          src={coverImage}
+          alt=""
+          class="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+          widths={[400, 800]}
+          sizes="(max-width: 640px) 100vw, 400px"
+        />
+      ) : (
+        <img
+          src={coverImage}
+          alt=""
+          loading="lazy"
+          class="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+        />
+      )}
+      <div
+        aria-hidden="true"
+        class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+      ></div>
+    </div>
   )}
   <div class="p-5">
     <div class="flex items-baseline justify-between gap-4">

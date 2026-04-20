@@ -6,13 +6,26 @@ import { getCollection } from 'astro:content';
 const bp = import.meta.env.BASE_URL;
 const base = bp.endsWith('/') ? bp.slice(0, -1) : bp;
 
+// Eagerly import all project cover assets so we can resolve string filenames
+// (from frontmatter) to their processed `{src,width,height,format}` objects.
+const coverAssets = import.meta.glob<{ default: ImageMetadata }>(
+  '../../assets/projects/*.{gif,jpg,jpeg,png,webp}',
+  { eager: true },
+);
+const coverByName = new Map<string, ImageMetadata>(
+  Object.entries(coverAssets).map(([path, mod]) => [
+    path.split('/').pop()!,
+    mod.default,
+  ]),
+);
+
 type Item = {
   id: string;
   title: string;
   summary: string;
   year: number;
   tags: string[];
-  coverImage?: string;
+  cover?: ImageMetadata | string;
   featured: boolean;
 };
 
@@ -21,43 +34,100 @@ try {
   const entries = await getCollection('projects');
   items = entries
     .filter((p) => p.id !== 'about' && p.id !== 'about/about')
-    .map((p) => ({
-      id: p.id,
-      title: p.data.title,
-      summary: p.data.summary,
-      year: p.data.year,
-      tags: p.data.tags ?? [],
-      coverImage: p.data.coverImage,
-      featured: p.data.featured ?? false,
-    }))
+    .map((p) => {
+      const coverName = p.data.coverImage;
+      const cover = coverName ? coverByName.get(coverName) ?? coverName : undefined;
+      return {
+        id: p.id,
+        title: p.data.title,
+        summary: p.data.summary,
+        year: p.data.year,
+        tags: p.data.tags ?? [],
+        cover,
+        featured: p.data.featured ?? false,
+      };
+    })
     .sort((a, b) => b.year - a.year);
 } catch {
   /* empty */
 }
+
+const allTags = Array.from(new Set(items.flatMap((p) => p.tags))).sort();
 ---
 <BaseLayout
   title="Projects — Cesare Scalia"
-  description="Selected projects and code."
+  description="Selected projects — graph ML, NLP, geospatial, astrophysics."
 >
-  <h1 class="text-3xl font-serif font-semibold tracking-tight mb-8">Projects</h1>
+  <h1 class="text-3xl font-serif font-semibold tracking-tight mb-2">Projects</h1>
+  <p class="text-slate-600 dark:text-slate-400 mb-8">A curated slice of applied work across graph ML, NLP, geospatial analytics and observational astrophysics.</p>
 
   {items.length === 0 ? (
     <p class="text-slate-500 dark:text-slate-400">Coming soon.</p>
   ) : (
     <section aria-labelledby="projects-heading">
       <h2 id="projects-heading" class="sr-only">All projects</h2>
-      <div class="grid gap-6 sm:grid-cols-2">
+
+      {allTags.length > 1 && (
+        <div class="mb-6 flex flex-wrap gap-2" role="group" aria-label="Filter by tag">
+          <button
+            type="button"
+            data-filter="all"
+            aria-pressed="true"
+            class="filter-chip rounded-full border border-accent-700 bg-accent-700 text-white px-3 py-1 text-xs font-medium transition-colors aria-pressed:bg-accent-700 aria-pressed:text-white"
+          >
+            All
+          </button>
+          {allTags.map((t) => (
+            <button
+              type="button"
+              data-filter={t}
+              aria-pressed="false"
+              class="filter-chip rounded-full border border-slate-300 dark:border-slate-700 px-3 py-1 text-xs text-slate-700 dark:text-slate-300 transition-colors hover:border-accent-500"
+            >
+              {t}
+            </button>
+          ))}
+        </div>
+      )}
+
+      <div id="projects-grid" class="grid gap-6 sm:grid-cols-2">
         {items.map((p) => (
-          <ProjectCard
-            title={p.title}
-            summary={p.summary}
-            year={p.year}
-            tags={p.tags}
-            coverImage={p.coverImage}
-            href={`${base}/projects/${p.id}`}
-          />
+          <div data-tags={p.tags.join(',')}>
+            <ProjectCard
+              title={p.title}
+              summary={p.summary}
+              year={p.year}
+              tags={p.tags}
+              coverImage={p.cover}
+              href={`${base}/projects/${p.id}`}
+            />
+          </div>
         ))}
       </div>
     </section>
   )}
 </BaseLayout>
+
+<script>
+  const chips = document.querySelectorAll<HTMLButtonElement>('.filter-chip');
+  const cards = document.querySelectorAll<HTMLElement>('#projects-grid > [data-tags]');
+
+  function apply(filter: string) {
+    chips.forEach((c) => {
+      const active = c.dataset.filter === filter;
+      c.setAttribute('aria-pressed', String(active));
+      c.classList.toggle('bg-accent-700', active);
+      c.classList.toggle('text-white', active);
+      c.classList.toggle('border-accent-700', active);
+    });
+    cards.forEach((card) => {
+      const tags = (card.dataset.tags ?? '').split(',');
+      const show = filter === 'all' || tags.includes(filter);
+      card.hidden = !show;
+    });
+  }
+
+  chips.forEach((c) => {
+    c.addEventListener('click', () => apply(c.dataset.filter ?? 'all'));
+  });
+</script>
