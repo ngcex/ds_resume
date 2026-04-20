@@ -40,5 +40,8 @@ try {
   description="Professional experience and roles."
 >
   <h1 class="text-3xl font-serif font-semibold tracking-tight mb-8">Experience</h1>
-  <Timeline items={items} />
+  <section aria-labelledby="roles-heading">
+    <h2 id="roles-heading" class="sr-only">Roles</h2>
+    <Timeline items={items} />
+  </section>
 </BaseLayout>

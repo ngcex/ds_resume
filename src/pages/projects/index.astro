@@ -44,17 +44,20 @@ try {
   {items.length === 0 ? (
     <p class="text-slate-500 dark:text-slate-400">Coming soon.</p>
   ) : (
-    <div class="grid gap-6 sm:grid-cols-2">
-      {items.map((p) => (
-        <ProjectCard
-          title={p.title}
-          summary={p.summary}
-          year={p.year}
-          tags={p.tags}
-          coverImage={p.coverImage}
-          href={`${base}/projects/${p.id}`}
-        />
-      ))}
-    </div>
+    <section aria-labelledby="projects-heading">
+      <h2 id="projects-heading" class="sr-only">All projects</h2>
+      <div class="grid gap-6 sm:grid-cols-2">
+        {items.map((p) => (
+          <ProjectCard
+            title={p.title}
+            summary={p.summary}
+            year={p.year}
+            tags={p.tags}
+            coverImage={p.coverImage}
+            href={`${base}/projects/${p.id}`}
+          />
+        ))}
+      </div>
+    </section>
   )}
 </BaseLayout>

@@ -60,7 +60,7 @@ const doiHref = doi ? (doi.startsWith("http") ? doi : `https://doi.org/${doi}`) 
             href={doiHref}
             target="_blank"
             rel="noopener noreferrer"
-            class="text-accent-700 dark:text-accent-500 no-underline hover:underline"
+            class="text-accent-700 dark:text-accent-400 no-underline hover:underline"
             aria-label={`DOI link for ${title}`}
           >
             DOI &#8599;
@@ -71,7 +71,7 @@ const doiHref = doi ? (doi.startsWith("http") ? doi : `https://doi.org/${doi}`) 
             href={adsLink}
             target="_blank"
             rel="noopener noreferrer"
-            class="text-accent-700 dark:text-accent-500 no-underline hover:underline"
+            class="text-accent-700 dark:text-accent-400 no-underline hover:underline"
             aria-label={`ADS link for ${title}`}
           >
             ADS &#8599;
@@ -82,7 +82,7 @@ const doiHref = doi ? (doi.startsWith("http") ? doi : `https://doi.org/${doi}`) 
             href={url}
             target="_blank"
             rel="noopener noreferrer"
-            class="text-accent-700 dark:text-accent-500 no-underline hover:underline"
+            class="text-accent-700 dark:text-accent-400 no-underline hover:underline"
           >
             Link &#8599;
           </a>

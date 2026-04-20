@@ -54,8 +54,9 @@ const faviconHref = `${bp.endsWith('/') ? bp.slice(0, -1) : bp}/favicon.svg`;
     <link rel="alternate" type="application/rss+xml" title="Cesare Scalia — Publications & Projects" href={`${bp.endsWith('/') ? bp.slice(0, -1) : bp}/rss.xml`} />
   </head>
   <body class="min-h-dvh flex flex-col">
+    <a href="#main-content" class="skip-link">Skip to main content</a>
     <Nav />
-    <main class="mx-auto max-w-3xl px-6 py-10 flex-1 w-full">
+    <main id="main-content" class="mx-auto max-w-3xl px-6 py-10 flex-1 w-full">
       <slot />
     </main>
     <Footer />

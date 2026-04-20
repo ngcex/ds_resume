@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
 import CurrentRole from '../components/CurrentRole.astro';
+import ProjectCard from '../components/ProjectCard.astro';
 import { getCollection } from 'astro:content';
 
 const bp = import.meta.env.BASE_URL;
@@ -55,6 +56,32 @@ try {
   /* collection not available yet */
 }
 
+// Featured projects (up to 3)
+type ProjLite = {
+  id: string;
+  title: string;
+  summary: string;
+  year: number;
+  tags: string[];
+};
+let featuredProjects: ProjLite[] = [];
+try {
+  const projects = await getCollection('projects');
+  featuredProjects = projects
+    .filter((p) => p.data.featured)
+    .map((p) => ({
+      id: p.id,
+      title: p.data.title,
+      summary: p.data.summary,
+      year: p.data.year,
+      tags: p.data.tags ?? [],
+    }))
+    .sort((a, b) => b.year - a.year)
+    .slice(0, 3);
+} catch {
+  /* collection not available yet */
+}
+
 const description =
   'Cesare Scalia, PhD — Lead Data Scientist at Life360. Causal ML, NLP, agentic AI. 13 peer-reviewed publications in A&A, MNRAS, Astronomical Journal.';
 ---
@@ -78,7 +105,7 @@ const description =
       <h2 class="text-2xl font-serif font-semibold tracking-tight">Selected publications</h2>
       <a
         href={`${base}/publications`}
-        class="text-sm text-accent-700 dark:text-accent-500 no-underline hover:underline"
+        class="text-sm text-accent-700 dark:text-accent-400 no-underline hover:underline"
       >
         All publications &rarr;
       </a>
@@ -99,7 +126,7 @@ const description =
                     href={doiHref}
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="mt-1 inline-block text-xs text-accent-700 dark:text-accent-500 no-underline hover:underline"
+                    class="mt-1 inline-block text-xs text-accent-700 dark:text-accent-400 no-underline hover:underline"
                   >
                     DOI &#8599;
                   </a>
@@ -116,9 +143,30 @@ const description =
   </section>
 
   <section class="mt-12">
-    <h2 class="text-2xl font-serif font-semibold tracking-tight">Selected projects</h2>
-    <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">Coming soon.</p>
-    <!-- Agent A: populate -->
+    <div class="flex items-baseline justify-between gap-4">
+      <h2 class="text-2xl font-serif font-semibold tracking-tight">Selected projects</h2>
+      <a
+        href={`${base}/projects`}
+        class="text-sm text-accent-700 dark:text-accent-400 no-underline hover:underline"
+      >
+        All projects &rarr;
+      </a>
+    </div>
+    {featuredProjects.length === 0 ? (
+      <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">Coming soon.</p>
+    ) : (
+      <div class="mt-4 grid gap-6 sm:grid-cols-2">
+        {featuredProjects.map((p) => (
+          <ProjectCard
+            title={p.title}
+            summary={p.summary}
+            year={p.year}
+            tags={p.tags}
+            href={`${base}/projects/${p.id}`}
+          />
+        ))}
+      </div>
+    )}
   </section>
 
   <section class="mt-12 rounded-lg border border-slate-200 dark:border-slate-800 p-6">
