@@ -25,6 +25,36 @@ try {
   /* collection not available yet */
 }
 
+// Top 3 most-recent peer-reviewed publications
+type PubLite = {
+  title: string;
+  year: number;
+  venueShort?: string;
+  venue: string;
+  doi?: string | null;
+  adsLink?: string | null;
+  url?: string | null;
+};
+let selectedPubs: PubLite[] = [];
+try {
+  const pubs = await getCollection('publications');
+  selectedPubs = pubs
+    .filter((p) => p.data.type === 'peer-reviewed')
+    .map((p) => ({
+      title: p.data.title,
+      year: p.data.year,
+      venueShort: p.data.venueShort,
+      venue: p.data.venue,
+      doi: p.data.doi ?? null,
+      adsLink: p.data.adsLink ?? null,
+      url: p.data.url ?? null,
+    }))
+    .sort((a, b) => b.year - a.year)
+    .slice(0, 3);
+} catch {
+  /* collection not available yet */
+}
+
 const description =
   'Cesare Scalia, PhD — Lead Data Scientist at Life360. Causal ML, NLP, agentic AI. 13 peer-reviewed publications in A&A, MNRAS, Astronomical Journal.';
 ---
@@ -44,9 +74,45 @@ const description =
   />
 
   <section class="mt-12">
-    <h2 class="text-2xl font-serif font-semibold tracking-tight">Selected publications</h2>
-    <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">Coming soon.</p>
-    <!-- Agent C: populate -->
+    <div class="flex items-baseline justify-between gap-4">
+      <h2 class="text-2xl font-serif font-semibold tracking-tight">Selected publications</h2>
+      <a
+        href={`${base}/publications`}
+        class="text-sm text-accent-700 dark:text-accent-500 no-underline hover:underline"
+      >
+        All publications &rarr;
+      </a>
+    </div>
+    {selectedPubs.length === 0 ? (
+      <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">Coming soon.</p>
+    ) : (
+      <ul class="mt-4 divide-y divide-slate-100 dark:divide-slate-800 list-none">
+        {selectedPubs.map((p) => {
+          const doiHref = p.doi ? (p.doi.startsWith('http') ? p.doi : `https://doi.org/${p.doi}`) : null;
+          return (
+            <li class="grid grid-cols-[3rem_1fr_auto] items-baseline gap-x-4 py-3">
+              <span class="font-mono text-xs tabular-nums text-slate-500 dark:text-slate-400">{p.year}</span>
+              <div class="min-w-0">
+                <p class="text-sm font-serif italic text-slate-900 dark:text-slate-100 leading-snug">{p.title}</p>
+                {doiHref && (
+                  <a
+                    href={doiHref}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="mt-1 inline-block text-xs text-accent-700 dark:text-accent-500 no-underline hover:underline"
+                  >
+                    DOI &#8599;
+                  </a>
+                )}
+              </div>
+              <span class="justify-self-end text-xs font-medium text-slate-600 dark:text-slate-400 whitespace-nowrap" title={p.venue}>
+                {p.venueShort ?? p.venue}
+              </span>
+            </li>
+          );
+        })}
+      </ul>
+    )}
   </section>
 
   <section class="mt-12">

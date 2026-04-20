@@ -1,0 +1,95 @@
+---
+interface Props {
+  targetId: string;
+  counts?: Partial<Record<"all" | "peer-reviewed" | "conference" | "internal-talk" | "poster", number>>;
+}
+
+const { targetId, counts = {} } = Astro.props;
+
+const chips: { value: string; label: string }[] = [
+  { value: "all", label: "All" },
+  { value: "peer-reviewed", label: "Peer-reviewed" },
+  { value: "conference", label: "Conference" },
+  { value: "poster", label: "Poster" },
+  { value: "internal-talk", label: "Talks" },
+];
+---
+<div
+  class="flex flex-wrap gap-2"
+  role="toolbar"
+  aria-label="Filter publications by type"
+  data-pub-filter
+  data-target={targetId}
+>
+  {chips.map((chip, i) => {
+    const count = counts[chip.value as keyof typeof counts];
+    const isActive = i === 0;
+    return (
+      <button
+        type="button"
+        aria-pressed={isActive ? "true" : "false"}
+        data-filter-value={chip.value}
+        class:list={[
+          "inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium border transition-colors",
+          "border-slate-200 dark:border-slate-700",
+          "aria-pressed:bg-accent-700 aria-pressed:text-white aria-pressed:border-accent-700",
+          "dark:aria-pressed:bg-accent-500 dark:aria-pressed:border-accent-500",
+          "hover:bg-slate-100 dark:hover:bg-slate-800",
+          "aria-pressed:hover:bg-accent-600 dark:aria-pressed:hover:bg-accent-600",
+        ]}
+      >
+        <span>{chip.label}</span>
+        {typeof count === "number" && (
+          <span
+            class="text-[10px] tabular-nums opacity-70"
+            aria-hidden="true"
+          >({count})</span>
+        )}
+      </button>
+    );
+  })}
+</div>
+
+<script is:inline>
+  (function () {
+    const toolbars = document.querySelectorAll('[data-pub-filter]');
+    toolbars.forEach((bar) => {
+      const targetId = bar.getAttribute('data-target');
+      if (!targetId) return;
+      const list = document.getElementById(targetId);
+      if (!list) return;
+      const buttons = bar.querySelectorAll('button[data-filter-value]');
+
+      function apply(value) {
+        const rows = list.querySelectorAll('[data-type]');
+        rows.forEach((row) => {
+          const t = row.getAttribute('data-type');
+          const match = value === 'all' || t === value;
+          if (match) {
+            row.removeAttribute('hidden');
+          } else {
+            row.setAttribute('hidden', '');
+          }
+        });
+        // Hide year separators that have no visible children
+        const groups = list.querySelectorAll('[data-year-group]');
+        groups.forEach((g) => {
+          const visible = g.querySelectorAll('[data-type]:not([hidden])').length;
+          if (visible === 0) {
+            g.setAttribute('hidden', '');
+          } else {
+            g.removeAttribute('hidden');
+          }
+        });
+      }
+
+      buttons.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const value = btn.getAttribute('data-filter-value');
+          buttons.forEach((b) => b.setAttribute('aria-pressed', b === btn ? 'true' : 'false'));
+          apply(value || 'all');
+        });
+      });
+    });
+  })();
+</script>
