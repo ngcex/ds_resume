@@ -9,6 +9,7 @@ interface Item {
   summary?: string;
   bullets?: string[];
   location?: string;
+  logo?: ImageMetadata;
 }
 
 interface Props {
@@ -30,6 +31,7 @@ const { items } = Astro.props;
         summary={item.summary}
         bullets={item.bullets}
         location={item.location}
+        logo={item.logo}
       />
     ))}
   </ol>

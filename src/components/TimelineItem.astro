@@ -1,4 +1,6 @@
 ---
+import { Image } from 'astro:assets';
+
 interface Props {
   title: string;
   company: string;
@@ -7,9 +9,10 @@ interface Props {
   summary?: string;
   bullets?: string[];
   location?: string;
+  logo?: ImageMetadata;
 }
 
-const { title, company, startDate, endDate, summary, bullets, location } =
+const { title, company, startDate, endDate, summary, bullets, location, logo } =
   Astro.props;
 
 const fmt = (d: Date | string | null | undefined) => {
@@ -23,21 +26,36 @@ const fmt = (d: Date | string | null | undefined) => {
     class="absolute left-0 top-2 h-2 w-2 rounded-full bg-accent-700 dark:bg-accent-500"
     aria-hidden="true"
   ></span>
-  <div class="flex flex-wrap items-baseline gap-x-2">
-    <h3 class="text-base font-semibold text-slate-900 dark:text-slate-100">{title}</h3>
-    <span class="text-slate-500 dark:text-slate-400">&middot;</span>
-    <span class="text-slate-700 dark:text-slate-300">{company}</span>
+  <div class="flex items-start gap-3">
+    {logo && (
+      <div class="mt-0.5 shrink-0 rounded-md bg-white dark:bg-slate-100 p-1 ring-1 ring-slate-200 dark:ring-slate-300">
+        <Image
+          src={logo}
+          alt={`${company} logo`}
+          width={32}
+          height={32}
+          class="h-6 w-6 object-contain"
+        />
+      </div>
+    )}
+    <div class="min-w-0 flex-1">
+      <div class="flex flex-wrap items-baseline gap-x-2">
+        <h3 class="text-base font-semibold text-slate-900 dark:text-slate-100">{title}</h3>
+        <span class="text-slate-500 dark:text-slate-400">&middot;</span>
+        <span class="text-slate-700 dark:text-slate-300">{company}</span>
+      </div>
+      <p class="mt-0.5 text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">
+        {fmt(startDate)} &ndash; {fmt(endDate)}
+        {location && <span> &middot; {location}</span>}
+      </p>
+      {summary && (
+        <p class="mt-2 text-sm text-slate-700 dark:text-slate-300 leading-relaxed">{summary}</p>
+      )}
+      {bullets && bullets.length > 0 && (
+        <ul class="mt-2 list-disc space-y-1 pl-5 text-sm text-slate-700 dark:text-slate-300">
+          {bullets.map((b) => <li>{b}</li>)}
+        </ul>
+      )}
+    </div>
   </div>
-  <p class="mt-0.5 text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">
-    {fmt(startDate)} &ndash; {fmt(endDate)}
-    {location && <span> &middot; {location}</span>}
-  </p>
-  {summary && (
-    <p class="mt-2 text-sm text-slate-700 dark:text-slate-300 leading-relaxed">{summary}</p>
-  )}
-  {bullets && bullets.length > 0 && (
-    <ul class="mt-2 list-disc space-y-1 pl-5 text-sm text-slate-700 dark:text-slate-300">
-      {bullets.map((b) => <li>{b}</li>)}
-    </ul>
-  )}
 </li>

@@ -3,6 +3,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Timeline from '../components/Timeline.astro';
 import { getCollection } from 'astro:content';
 
+const logoAssets = import.meta.glob<{ default: ImageMetadata }>(
+  '../assets/logos/*.{jpg,jpeg,png,webp,svg}',
+  { eager: true },
+);
+const logoByName = new Map<string, ImageMetadata>(
+  Object.entries(logoAssets).map(([path, mod]) => [path.split('/').pop()!, mod.default]),
+);
+
 type Item = {
   title: string;
   company: string;
@@ -11,21 +19,27 @@ type Item = {
   summary?: string;
   bullets?: string[];
   location?: string;
+  logo?: ImageMetadata;
 };
 
 let items: Item[] = [];
 try {
   const entries = await getCollection('experience');
   items = entries
-    .map((e) => ({
-      title: e.data.title,
-      company: e.data.company,
-      startDate: e.data.startDate,
-      endDate: e.data.endDate ?? null,
-      summary: e.data.summary,
-      bullets: e.data.bullets,
-      location: e.data.location,
-    }))
+    .map((e) => {
+      const logoName = e.data.logo;
+      const logo = logoName ? logoByName.get(logoName) : undefined;
+      return {
+        title: e.data.title,
+        company: e.data.company,
+        startDate: e.data.startDate,
+        endDate: e.data.endDate ?? null,
+        summary: e.data.summary,
+        bullets: e.data.bullets,
+        location: e.data.location,
+        logo,
+      };
+    })
     .sort((a, b) => {
       const ad = a.startDate instanceof Date ? a.startDate.getTime() : new Date(a.startDate).getTime();
       const bd = b.startDate instanceof Date ? b.startDate.getTime() : new Date(b.startDate).getTime();

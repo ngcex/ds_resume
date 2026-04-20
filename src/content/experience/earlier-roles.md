@@ -4,6 +4,7 @@ company: "ST Microelectronics, Leonardo, INAF"
 startDate: 2018-01-01
 endDate: 2020-12-31
 location: "Italy"
+logo: "st.jpg"
 summary: "Three consecutive roles bridging research and industry."
 bullets:
   - "Device Engineer at ST Microelectronics: yield analytics on semiconductor manufacturing processes."
