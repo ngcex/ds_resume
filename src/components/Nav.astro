@@ -1,0 +1,69 @@
+---
+import ThemeToggle from './ThemeToggle.astro';
+import { getCollection } from 'astro:content';
+
+const bp = import.meta.env.BASE_URL;
+const withBase = (path: string) => {
+  const base = bp.endsWith('/') ? bp.slice(0, -1) : bp;
+  const p = path.startsWith('/') ? path : `/${path}`;
+  return `${base}${p}`;
+};
+
+let siteName = 'Cesare Scalia';
+try {
+  const entries = await getCollection('site');
+  if (entries.length > 0) siteName = entries[0].data.name;
+} catch {
+  /* collection may not exist yet */
+}
+
+const links = [
+  { href: withBase('/about'), label: 'About' },
+  { href: withBase('/experience'), label: 'Experience' },
+  { href: withBase('/publications'), label: 'Publications' },
+  { href: withBase('/projects'), label: 'Projects' },
+  { href: withBase('/contact'), label: 'Contact' },
+];
+---
+<nav
+  aria-label="Primary"
+  class="border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-950/80 backdrop-blur supports-[backdrop-filter]:bg-white/60"
+>
+  <div class="mx-auto flex max-w-3xl items-center justify-between px-6 py-4">
+    <a
+      href={withBase('/')}
+      class="font-serif text-lg font-semibold tracking-tight no-underline hover:text-accent-700 dark:hover:text-accent-500"
+    >
+      {siteName}
+    </a>
+
+    <div class="flex items-center gap-4 sm:gap-6">
+      <ul class="hidden sm:flex items-center gap-5 text-sm">
+        {links.map((l) => (
+          <li>
+            <a
+              href={l.href}
+              class="no-underline text-slate-700 hover:text-accent-700 dark:text-slate-300 dark:hover:text-accent-500"
+            >
+              {l.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+      <ThemeToggle />
+    </div>
+  </div>
+
+  <ul class="sm:hidden flex flex-wrap items-center gap-4 border-t border-slate-100 dark:border-slate-800 px-6 py-2 text-sm">
+    {links.map((l) => (
+      <li>
+        <a
+          href={l.href}
+          class="no-underline text-slate-700 hover:text-accent-700 dark:text-slate-300 dark:hover:text-accent-500"
+        >
+          {l.label}
+        </a>
+      </li>
+    ))}
+  </ul>
+</nav>

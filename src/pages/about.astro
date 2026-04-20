@@ -1,0 +1,31 @@
+---
+import ProseLayout from '../layouts/ProseLayout.astro';
+import { getCollection, render } from 'astro:content';
+
+let Content: Awaited<ReturnType<typeof render>>['Content'] | null = null;
+let title = 'About';
+let description = 'About Cesare Scalia.';
+
+try {
+  // Agent A will create an 'about' entry in some collection (e.g. 'pages' or 'projects');
+  // we look first for a 'site'-adjacent 'about' MDX entry in projects as a graceful fallback.
+  const pages = await getCollection('projects');
+  const about = pages.find((p) => p.id === 'about' || p.id === 'about/about');
+  if (about) {
+    const rendered = await render(about);
+    Content = rendered.Content;
+    title = about.data.title ?? title;
+    description = about.data.summary ?? description;
+  }
+} catch {
+  /* ignore */
+}
+---
+<ProseLayout title={title} description={description}>
+  <h1>About</h1>
+  {Content ? (
+    <Content />
+  ) : (
+    <p>Coming soon.</p>
+  )}
+</ProseLayout>

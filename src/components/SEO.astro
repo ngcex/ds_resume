@@ -1,0 +1,31 @@
+---
+// Minimal SEO stub — Agent D will expand with JSON-LD, article tags, etc.
+interface Props {
+  title: string;
+  description: string;
+  canonical?: string;
+  image?: string;
+}
+
+const { title, description, canonical, image } = Astro.props;
+const bp = import.meta.env.BASE_URL;
+const site = Astro.site?.toString().replace(/\/$/, '') ?? '';
+const canonicalUrl = canonical ?? new URL(Astro.url.pathname, Astro.site ?? 'https://ngcex.github.io').toString();
+const ogImage = image ?? `${site}${bp}favicon.svg`;
+---
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonicalUrl} />
+
+<meta property="og:type" content="website" />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonicalUrl} />
+<meta property="og:image" content={ogImage} />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImage} />
+
+<!-- Agent D: add JSON-LD here -->

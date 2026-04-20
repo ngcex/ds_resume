@@ -1,0 +1,60 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import { getCollection } from 'astro:content';
+
+const bp = import.meta.env.BASE_URL;
+const base = bp.endsWith('/') ? bp.slice(0, -1) : bp;
+
+type Item = {
+  id: string;
+  title: string;
+  summary: string;
+  year: number;
+  tags: string[];
+  coverImage?: string;
+  featured: boolean;
+};
+
+let items: Item[] = [];
+try {
+  const entries = await getCollection('projects');
+  items = entries
+    .filter((p) => p.id !== 'about' && p.id !== 'about/about')
+    .map((p) => ({
+      id: p.id,
+      title: p.data.title,
+      summary: p.data.summary,
+      year: p.data.year,
+      tags: p.data.tags ?? [],
+      coverImage: p.data.coverImage,
+      featured: p.data.featured ?? false,
+    }))
+    .sort((a, b) => b.year - a.year);
+} catch {
+  /* empty */
+}
+---
+<BaseLayout
+  title="Projects — Cesare Scalia"
+  description="Selected projects and code."
+>
+  <h1 class="text-3xl font-serif font-semibold tracking-tight mb-8">Projects</h1>
+
+  {items.length === 0 ? (
+    <p class="text-slate-500 dark:text-slate-400">Coming soon.</p>
+  ) : (
+    <div class="grid gap-6 sm:grid-cols-2">
+      {items.map((p) => (
+        <ProjectCard
+          title={p.title}
+          summary={p.summary}
+          year={p.year}
+          tags={p.tags}
+          coverImage={p.coverImage}
+          href={`${base}/projects/${p.id}`}
+        />
+      ))}
+    </div>
+  )}
+</BaseLayout>

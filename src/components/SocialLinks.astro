@@ -1,0 +1,70 @@
+---
+import { getCollection } from 'astro:content';
+import { Icon } from 'astro-icon/components';
+
+type Socials = {
+  github?: string;
+  linkedin?: string;
+  orcid?: string;
+  email?: string;
+};
+
+let socials: Socials = {};
+try {
+  const entries = await getCollection('site');
+  if (entries.length > 0) socials = entries[0].data.socials ?? {};
+} catch {
+  /* ignore */
+}
+
+const mailto = socials.email ? `mailto:${socials.email}` : null;
+---
+<ul class="flex items-center gap-4">
+  {socials.github && (
+    <li>
+      <a
+        href={socials.github}
+        aria-label="GitHub profile"
+        rel="me noopener"
+        class="inline-flex h-9 w-9 items-center justify-center rounded-md text-slate-700 dark:text-slate-300 hover:text-accent-700 dark:hover:text-accent-500 no-underline"
+      >
+        <Icon name="lucide:github" class="h-5 w-5" />
+      </a>
+    </li>
+  )}
+  {socials.linkedin && (
+    <li>
+      <a
+        href={socials.linkedin}
+        aria-label="LinkedIn profile"
+        rel="me noopener"
+        class="inline-flex h-9 w-9 items-center justify-center rounded-md text-slate-700 dark:text-slate-300 hover:text-accent-700 dark:hover:text-accent-500 no-underline"
+      >
+        <Icon name="lucide:linkedin" class="h-5 w-5" />
+      </a>
+    </li>
+  )}
+  {mailto && (
+    <li>
+      <a
+        href={mailto}
+        aria-label="Send email"
+        class="inline-flex h-9 w-9 items-center justify-center rounded-md text-slate-700 dark:text-slate-300 hover:text-accent-700 dark:hover:text-accent-500 no-underline"
+      >
+        <Icon name="lucide:mail" class="h-5 w-5" />
+      </a>
+    </li>
+  )}
+  {socials.orcid && (
+    <li>
+      <a
+        href={socials.orcid}
+        aria-label="ORCID profile"
+        rel="me noopener"
+        class="inline-flex h-9 w-9 items-center justify-center rounded-md text-slate-700 dark:text-slate-300 hover:text-accent-700 dark:hover:text-accent-500 no-underline"
+      >
+        <Icon name="lucide:badge-check" class="h-5 w-5" />
+      </a>
+    </li>
+  )}
+</ul>

@@ -1,0 +1,55 @@
+---
+import { getCollection } from 'astro:content';
+import { Icon } from 'astro-icon/components';
+
+const bp = import.meta.env.BASE_URL;
+const rssHref = `${bp.endsWith('/') ? bp.slice(0, -1) : bp}/rss.xml`;
+
+type Socials = {
+  github?: string;
+  linkedin?: string;
+  orcid?: string;
+  email?: string;
+};
+
+let socials: Socials = {};
+try {
+  const entries = await getCollection('site');
+  if (entries.length > 0) socials = entries[0].data.socials ?? {};
+} catch {
+  /* ignore */
+}
+---
+<footer class="border-t border-slate-200 dark:border-slate-800 mt-16">
+  <div class="mx-auto flex max-w-3xl flex-col gap-3 sm:flex-row sm:items-center sm:justify-between px-6 py-6 text-sm text-slate-500 dark:text-slate-400">
+    <p>&copy; 2026 Cesare Scalia &middot; Built with Astro</p>
+    <ul class="flex items-center gap-4">
+      {socials.github && (
+        <li>
+          <a href={socials.github} aria-label="GitHub" rel="me noopener" class="no-underline">
+            <Icon name="lucide:github" class="h-4 w-4" />
+          </a>
+        </li>
+      )}
+      {socials.linkedin && (
+        <li>
+          <a href={socials.linkedin} aria-label="LinkedIn" rel="me noopener" class="no-underline">
+            <Icon name="lucide:linkedin" class="h-4 w-4" />
+          </a>
+        </li>
+      )}
+      {socials.orcid && (
+        <li>
+          <a href={socials.orcid} aria-label="ORCID" rel="me noopener" class="no-underline">
+            <Icon name="lucide:badge-check" class="h-4 w-4" />
+          </a>
+        </li>
+      )}
+      <li>
+        <a href={rssHref} aria-label="RSS feed" class="no-underline">
+          <Icon name="lucide:rss" class="h-4 w-4" />
+        </a>
+      </li>
+    </ul>
+  </div>
+</footer>

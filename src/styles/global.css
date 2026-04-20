@@ -1,0 +1,52 @@
+@import "tailwindcss";
+@import "@fontsource-variable/inter";
+@import "@fontsource/ibm-plex-serif/400.css";
+@import "@fontsource/ibm-plex-serif/600.css";
+
+@theme {
+  --color-accent-50: oklch(0.96 0.02 272);
+  --color-accent-100: oklch(0.91 0.05 272);
+  --color-accent-500: oklch(0.51 0.18 272);
+  --color-accent-600: oklch(0.45 0.2 272);
+  --color-accent-700: oklch(0.36 0.2 272); /* #3730a3 approx */
+  --color-accent-900: oklch(0.25 0.16 272);
+  --font-sans:
+    "Inter Variable", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-serif: "IBM Plex Serif", ui-serif, Georgia, serif;
+}
+
+@variant dark (&:where(.dark, .dark *));
+
+:root {
+  color-scheme: light dark;
+}
+html {
+  font-family: var(--font-sans);
+}
+body {
+  @apply bg-white text-slate-900 dark:bg-slate-950 dark:text-slate-100 antialiased;
+}
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-serif);
+  @apply font-semibold tracking-tight;
+}
+a {
+  @apply underline-offset-4 decoration-accent-500/40 hover:decoration-accent-500;
+}
+
+/* Prose tweaks */
+.prose-scientific {
+  @apply max-w-prose leading-relaxed;
+}
+.prose-scientific h2 {
+  @apply mt-12 mb-4 text-2xl;
+}
+.prose-scientific h3 {
+  @apply mt-8 mb-3 text-xl;
+}
+.prose-scientific p {
+  @apply my-4;
+}
