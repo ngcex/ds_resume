@@ -66,19 +66,19 @@ const chips: { value: string; label: string }[] = [
           const t = row.getAttribute('data-type');
           const match = value === 'all' || t === value;
           if (match) {
-            row.removeAttribute('hidden');
+            row.classList.remove('hidden');
           } else {
-            row.setAttribute('hidden', '');
+            row.classList.add('hidden');
           }
         });
         // Hide year separators that have no visible children
         const groups = list.querySelectorAll('[data-year-group]');
         groups.forEach((g) => {
-          const visible = g.querySelectorAll('[data-type]:not([hidden])').length;
+          const visible = g.querySelectorAll('[data-type]:not(.hidden)').length;
           if (visible === 0) {
-            g.setAttribute('hidden', '');
+            g.classList.add('hidden');
           } else {
-            g.removeAttribute('hidden');
+            g.classList.remove('hidden');
           }
         });
       }
