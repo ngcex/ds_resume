@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="800" height="450">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fdf2f8"/>
+      <stop offset="100%" stop-color="#fce7f3"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="450" fill="url(#bg)"/>
+  <!-- Paint stripes -->
+  <rect x="0" y="0" width="133" height="450" fill="#f9a8d4" opacity="0.35"/>
+  <rect x="133" y="0" width="134" height="450" fill="#fbbf24" opacity="0.28"/>
+  <rect x="267" y="0" width="133" height="450" fill="#86efac" opacity="0.30"/>
+  <rect x="400" y="0" width="134" height="450" fill="#93c5fd" opacity="0.30"/>
+  <rect x="534" y="0" width="133" height="450" fill="#c4b5fd" opacity="0.30"/>
+  <rect x="667" y="0" width="133" height="450" fill="#f9a8d4" opacity="0.25"/>
+  <!-- Paintbrush icon -->
+  <g transform="translate(340,140)">
+    <ellipse cx="60" cy="60" rx="48" ry="48" fill="white" opacity="0.85"/>
+    <!-- simplified paintbrush -->
+    <rect x="54" y="20" width="12" height="50" rx="4" fill="#db2777"/>
+    <ellipse cx="60" cy="72" rx="10" ry="14" fill="#f472b6"/>
+    <rect x="56" y="82" width="8" height="18" rx="2" fill="#92400e"/>
+  </g>
+  <!-- Text -->
+  <text x="400" y="270" font-family="Georgia, serif" font-size="28" fill="#831843" text-anchor="middle" font-weight="bold">Corsie a Colori</text>
+  <text x="400" y="305" font-family="Georgia, serif" font-size="16" fill="#9d174d" text-anchor="middle">Art in pediatric hospitals</text>
+  <text x="400" y="335" font-family="Georgia, serif" font-size="13" fill="#be185d" text-anchor="middle">5 hospitals · Catania · 2022–present</text>
+</svg>

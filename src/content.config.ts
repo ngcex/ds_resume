@@ -86,6 +86,24 @@ const pages = defineCollection({
   }),
 });
 
+const volunteering = defineCollection({
+  loader: glob({
+    pattern: "**/*.{md,mdx}",
+    base: "./src/content/volunteering",
+  }),
+  schema: z.object({
+    title: z.string(),
+    subtitle: z.string().optional(),
+    period: z.string(),
+    role: z.string(),
+    location: z.string().optional(),
+    coverImage: z.string().optional(),
+    links: z
+      .array(z.object({ label: z.string(), url: z.string() }))
+      .default([]),
+  }),
+});
+
 export const collections = {
   experience,
   education,
@@ -93,4 +111,5 @@ export const collections = {
   projects,
   site,
   pages,
+  volunteering,
 };
