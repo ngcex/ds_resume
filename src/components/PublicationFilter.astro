@@ -51,7 +51,7 @@ const chips: { value: string; label: string }[] = [
 </div>
 
 <script is:inline>
-  (function () {
+  document.addEventListener('DOMContentLoaded', function () {
     const toolbars = document.querySelectorAll('[data-pub-filter]');
     toolbars.forEach((bar) => {
       const targetId = bar.getAttribute('data-target');
@@ -71,7 +71,6 @@ const chips: { value: string; label: string }[] = [
             row.classList.add('hidden');
           }
         });
-        // Hide year separators that have no visible children
         const groups = list.querySelectorAll('[data-year-group]');
         groups.forEach((g) => {
           const visible = g.querySelectorAll('[data-type]:not(.hidden)').length;
@@ -91,5 +90,5 @@ const chips: { value: string; label: string }[] = [
         });
       });
     });
-  })();
+  });
 </script>
