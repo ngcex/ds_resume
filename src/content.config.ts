@@ -101,6 +101,16 @@ const volunteering = defineCollection({
     links: z
       .array(z.object({ label: z.string(), url: z.string() }))
       .default([]),
+    news: z
+      .array(
+        z.object({
+          title: z.string(),
+          source: z.string(),
+          date: z.string(),
+          url: z.string(),
+        }),
+      )
+      .default([]),
   }),
 });
 
