@@ -1,7 +1,7 @@
 ---
 title: "Lead Data Scientist"
 company: "Life360"
-startDate: 2025-01-01
+startDate: 2025-05-01
 endDate: null
 location: "Remote / Milan, Italy"
 summary: "Design and deliver causal measurement, geospatial analytics, and ML systems for Life360's advertising business, serving ad campaigns across millions of users."

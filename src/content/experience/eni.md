@@ -1,8 +1,8 @@
 ---
 title: "Senior Data Scientist"
 company: "Eni"
-startDate: 2020-01-01
-endDate: 2025-12-31
+startDate: 2020-04-01
+endDate: 2025-04-30
 location: "Milan, Italy"
 logo: "eni.jpg"
 summary: "Led a small team developing AI-driven algorithms for reputation analysis and measurement. Managed projects integrating generative AI, NLP and Transformer models to enhance data-driven decision-making across computing, communications and public-relations sectors, and coordinated with external suppliers to deliver high-quality solutions."
